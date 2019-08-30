@@ -80,7 +80,7 @@ RUN rosdep update
 RUN rosdep install --from-paths src --ignore-src --rosdistro dashing -y --skip-keys "console_bridge fastcdr fastrtps libopensplice67 libopensplice69 rti-connext-dds-5.3.1 urdfdom_headers rviz_ogre_vendor rviz_default_plugins"
 
 # build ros2 except for ros1_bridge
-RUN colcon build --symlink-install --packages-skip ros1_bridge --cmake-args -DDISABLE_SANITIZERS=ON
+RUN colcon build --merge-install --packages-skip ros1_bridge --cmake-args -DDISABLE_SANITIZERS=ON
 
 # -------------------------------------------------------------------
 
