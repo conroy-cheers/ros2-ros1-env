@@ -73,8 +73,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
 
 RUN mkdir -p /ros2_ws/src
 WORKDIR /ros2_ws/
-RUN wget https://raw.githubusercontent.com/ros2/ros2/dashing/ros2.repos
-RUN vcs import src < ros2.repos
+RUN wget https://raw.githubusercontent.com/conroy-cheers/ros2/dashing/ros2-lite.repos
+RUN vcs import src < ros2-lite.repos
 
 RUN rosdep update
 RUN rosdep install --from-paths src --ignore-src --rosdistro dashing -y --skip-keys "console_bridge fastcdr fastrtps libopensplice67 libopensplice69 rti-connext-dds-5.3.1 urdfdom_headers rviz_ogre_vendor rviz_default_plugins"
@@ -82,9 +82,14 @@ RUN rosdep install --from-paths src --ignore-src --rosdistro dashing -y --skip-k
 # build ros2 except for ros1_bridge
 RUN colcon build --symlink-install --merge-install --packages-skip ros1_bridge --cmake-args -DDISABLE_SANITIZERS=ON
 
+# delete wasteful things
+RUN rm -rf build/ src/
+
 # -------------------------------------------------------------------
 
 RUN apt-get install -y python-catkin-tools
+
+RUN apt-get clean
 
 # set up ros1 overlay
 RUN mkdir -p /ros1_overlay_ws/
